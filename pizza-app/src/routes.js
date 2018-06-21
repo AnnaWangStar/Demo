@@ -27,6 +27,7 @@ export const routes = [
     // router-view的复用
     components: {
       default:Home,
+      // 给路由命名
       'orderingGuide':OrderingGuide,
       'delivary':Delivery,
       'history':History,
