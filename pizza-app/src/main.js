@@ -10,7 +10,22 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes,
-  mode: 'history'
+  mode: 'history',
+  // 
+  scrollBehavior(to,from,savedPosition){
+    // 返回页面中，直接展示button
+    // return {
+    //   selector:'.btn'
+    // }
+
+    //记住上一个页面滑动的位置
+    if(savedPosition){
+      return savedPosition
+    } else{
+      return{x:0,y:0}
+    }
+
+  }
 })
 
 new Vue({

@@ -45,16 +45,7 @@ export const routes = [
     path: '/admin',
     name: 'adminLink',
     component: Admin,
-    // // 路由独享守卫
-    // beforeEnter: ((to, from, next) => {
-    //   // 只针对admin这个组件起作用
-    //   if (to.path == '/login' || to.path == '/register') {
-    //     next();
-    //   } else {
-    //     alert("未登录，请先登录");
-    //     next('/login');
-    //   }
-    // })
+    
   },
   // 关于我们
   {
