@@ -7,19 +7,19 @@
                 <li class="nav-item">
                     <router-link to="/home" class="nav-link">首页</router-link>
                 </li>
-                <!-- bug管理 -->
-                <li class="dropdown">
-                    <router-link to="/bugs/bug" class="nav-link">bugs管理</router-link>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <router-link to="/bugs/bug">bug</router-link>
-                        </li>
-                        <li>
-                            <router-link to="/bugs/analysis">bug分析</router-link>
-                        </li>
 
+                <!-- bug管理 -->
+                <li class="nav-item">
+                    <router-link tag="a" to="/bugs/bug" class="nav-item">bug管理</router-link>
+                    <ul class="dropdown-menu">
+                        <li><router-link class="dropdown-item" to="/bugs/bug">bug</router-link></li>
+                        <li><router-link class="dropdown-item" to="/bugs/analysis">bug分析</router-link></li>
                     </ul>
                 </li>
+
+
+
+
 
                 <!-- 测试管理 -->
                 <li class="nav-item">
@@ -35,3 +35,6 @@
     </nav>
 </template>
 
+<style>
+
+</style>
