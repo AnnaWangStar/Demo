@@ -1,32 +1,12 @@
 import Vue from 'vue'
+// 导入路由
 import VueRouter from 'vue-router'
 import App from './App.vue'
-import Bug from './components/bugs/Bug.vue'
-import Analysis from './components/bugs/Analysis.vue'
-import Test from './components/qa/Test.vue'
-import Tools from './components/tools/Tools.vue'
+import {routes} from './routes'
 
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/bugs/bug',
-    component: Bug
-  },
-  {
-    path:'/bugs/analysis',
-    component:Analysis
-  },
-  {
-    path: '/qa/test',
-    component: Test
-  },
-  {
-    path: '/tools',
-    component: Tools
-  }
-]
 
 const router = new VueRouter({
   routes,

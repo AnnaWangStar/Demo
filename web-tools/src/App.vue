@@ -7,15 +7,15 @@
         <div class="container">
             <router-view></router-view>
         </div>
-        
+
     </div>
 </template>
 
 <script>
-import Home from "./components/Home";
+import Header from "./components/Header";
 export default {
   components: {
-    "app-home": Home,
+    "app-home": Header,
      
   }
 };
