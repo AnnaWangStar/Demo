@@ -4,9 +4,13 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import App from './App.vue'
 import {routes} from './routes';
+import axios from 'axios'
 
 // 使用路由
 Vue.use(VueRouter)
+
+//配置全局的默认路径
+axios.defaults.baseURL='https://wd4241011795gxrnxa.wilddogio.com/'
 
 const router = new VueRouter({
   routes,

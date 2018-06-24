@@ -101,11 +101,13 @@ export const routes = [
   // 登录
   {
     path: '/login',
+    name:'loginLink',
     component: Login
   },
   // 注册
   {
     path: '/register',
+    name:'registerLink',
     component: Register
   },
 
