@@ -23,7 +23,7 @@ export const routes = [
   // /代表根路径
   {
     path: '/',
-    name:"nameLink",
+    name:"homeLink",
     // router-view的复用
     components: {
       default:Home,

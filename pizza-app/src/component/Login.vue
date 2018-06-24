@@ -28,20 +28,39 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-    data(){
-        return{
-            email:'',
-            password:'',
-            
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  // 方法
+  methods: {
+    onSubmit() {
+      axios.get("/users.json").then(res => {
+        // res.data 转化成数组
+        const data = res.data;
+        const users = [];
+        // 遍历当前对象
+        for (let key in data) {
+          const user = data[key];
+          users.push(user);
         }
-    },
-    // 方法
-    methods:{
-        
-        onSubmit(){
-            
+        // 实现过滤
+        let result = users.filter(user => {
+          return user.email === this.email && user.password === this.password;
+        });
+        // 判断result的长度是否大于0
+        if (result.length > 0 && result != null) {
+            // 登录成功，页面跳转至首页
+            this.$router.push({ name: "homeLink" })
+        }else{
+            alert("账号或密码错误")
         }
+      });
     }
-}
+  }
+};
 </script>
