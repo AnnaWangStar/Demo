@@ -11,8 +11,8 @@
                     </tr>
                 </thead>
                 <!-- 将data中的数据展示出来 -->
+                <!-- v-bind 缩写成: -->
                 <tbody v-for="(item,index) in getMenuItems" :key="index">
-                    <!-- v-for="(item,index) in baskets" :key="index" -->
                     <tr>
                         <td>
                             <strong>{{item.name}}</strong>
@@ -22,6 +22,7 @@
                         <td>{{option.size}}</td>
                         <td>{{option.price}}</td>
                         <td>
+                          <!-- v-on缩写@ -->
                             <button @click="addToBasket(item,option)" class="btn btn-sm btn-outline-success">
                                 +</button>
                         </td>
