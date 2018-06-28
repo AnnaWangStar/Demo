@@ -45,7 +45,7 @@
         </div>
         <!-- 添加按钮 -->
         <div class="form-group row">
-            <button type="button" class="btn btn-success btn-block">
+            <button type="button" v-on:click="addMenuItem" class="btn btn-success btn-block">
                 添加
             </button>
         </div>
@@ -57,6 +57,45 @@ export default {
         return{
             newPizza:{}
         }
+    },
+    // 添加方法
+    methods:{
+        addMenuItem(){
+            //新增数据的 数据结构
+            let data={
+                name:this.newPizza.name,
+                description:this.newPizza.description,
+                options:[
+                    {
+                        size:this.newPizza.size1,
+                        price:this.newPizza.price1
+                    },
+                    {
+                        size:this.newPizza.size2,
+                        price:this.newPizza.price2
+                    },
+                ],}
+
+                // vue-resource 
+                // es6提供了一个fetch
+                fetch("野狗的地址",{
+                    method:"POST",
+                    headers:{
+                        "Content-type":"application/json"
+                    },
+                    body:JSON.stringify(data),
+                    
+                })
+                // 提交，
+                .then(res => console.log)
+                .then(res => res.json())
+                // 添加成功后，跳转至menu页面
+                .then(res => this.$router.push({name:"menuLink"}))
+                // 出错，控制台打印出错误日志
+                .catch(err => console.log(err))
+
+        }
     }
+    
 }
 </script>
