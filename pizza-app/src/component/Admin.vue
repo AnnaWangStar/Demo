@@ -73,7 +73,7 @@ export default {
       })
       .then(data => {
         // 得到数据库中所有的对象
-        let menuArray = [];
+        let menuArray = []
         // 遍历所有的对象，取出唯一的key，作为id，根据id去删除
         for (let key in data) {
           // console.log(key)

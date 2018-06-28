@@ -10,7 +10,9 @@ import axios from 'axios'
 Vue.use(VueRouter)
 
 //配置全局的默认路径
-axios.defaults.baseURL='https://wd4241011795gxrnxa.wilddogio.com/'
+axios.defaults.baseURL='https://wd6846125205vdfnry.wilddogio.com/'
+// 配置Vue原型
+Vue.prototype.http = axios
 
 const router = new VueRouter({
   routes,

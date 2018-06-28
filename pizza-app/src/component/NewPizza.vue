@@ -79,21 +79,25 @@ export default {
                 // 实现请求，将数据传给野狗平台中
                 // axios vue-resource 也可以实现
                 // es6提供了一个fetch
-                fetch("https://wd6846125205vdfnry.wilddogio.com/menu.json",{
-                    // post请求
-                    method:"POST",
-                    headers:{
-                        "Content-type":"application/json"
-                    },
-                    body:JSON.stringify(data),
-                })
-                // 提交，
-                // .then(res =>console.log(res))
-                .then(res => res.json())
-                // 添加成功后，跳转至menu页面
+                // fetch("https://wd6846125205vdfnry.wilddogio.com/menu.json",{
+                //     // post请求
+                //     method:"POST",
+                //     headers:{
+                //         "Content-type":"application/json"
+                //     },
+                //     body:JSON.stringify(data),
+                // })
+                // // 提交，
+                // // .then(res =>console.log(res))
+                // .then(res => res.json())
+                // // 添加成功后，跳转至menu页面
+                // .then(res => this.$router.push({name:"menuLink"}))
+                // // 出错，控制台打印出错误日志
+                // .catch(err => console.log(err))
+                
+                // 使用全局axios
+                this.http.post("menu.json",data)
                 .then(res => this.$router.push({name:"menuLink"}))
-                // 出错，控制台打印出错误日志
-                .catch(err => console.log(err))
 
         }
     }
