@@ -5,6 +5,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import {routes} from './routes';
 import axios from 'axios'
+import {store} from './store/store';
+
 
 // 使用路由
 Vue.use(VueRouter)

@@ -1,8 +1,8 @@
 {
-  "name": "pizza-app",
+  "name": "calculator",
   "description": "A Vue.js project",
   "version": "1.0.0",
-  "author": "wangxing1 <wangxing1@360.cn>",
+  "author": "AnnaWangStar <1875057905@qq.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -10,10 +10,9 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "element-ui": "^2.4.3",
     "vue": "^2.5.11",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue-router": "^3.0.1"
   },
   "browserslist": [
     "> 1%",
