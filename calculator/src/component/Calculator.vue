@@ -4,7 +4,7 @@
       <input type="text">
     </div>
     <table class="calc-operation">
-      <thead></thead>
+      <thead>这是本地Mac修改</thead>
       <tbody>
         <!-- 第一行 -->
         <tr>
