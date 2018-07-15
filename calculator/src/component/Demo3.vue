@@ -37,7 +37,7 @@
             </el-table-column>
         </el-table> -->
         <div>计算器BY王醒</div>
-        <el-input v-model="input" placeholder="请输入内容"></el-input>
+        <el-input v-model="inputShow" placeholder="请输入内容"></el-input>
         <el-input v-model="result" placeholder="结果是"></el-input>
         <table>
             <!-- 第一行 -->
@@ -107,16 +107,19 @@
 export default {
   data() {
     return {
-      input: "",
-      result: ""
+      input: [],
+      inputShow: "",
+      result: "",
+      num: [],
+      operator: []
     };
   },
   methods: {
+    // 显示输出的所有数和操作符
     append(i) {
-      //   alert(i)
-      this.input = this.input + i;
+      this.inputShow += i;
     },
-    calculate() {
+    /*calculate() {
       var num1 = 0;
       var num2 = 0;
       var str1 = "";
@@ -147,10 +150,79 @@ export default {
         // }
       }
       return this.result;
+    },*/
+    storage(input, num, operator) {
+      // alert(input);
+      var numTemp = "";
+      var k = -1;
+      for (var i = 0; i < input.length; i++) {
+        if (
+          input[i] == "+" ||
+          input[i] == "-" ||
+          input[i] == "*" ||
+          input[i] == "/"
+        ) {
+          for (var j = k + 1; j < i; j++) {
+            numTemp = numTemp + input[j];
+          }
+          num.push(numTemp);
+          operator.push(input[i]);
+          k = i;
+          numTemp = "";
+        }
+      }
+      for (var m = k + 1; m < input.length; m++) {
+        numTemp = numTemp + input[m];
+      }
+      num.push(numTemp);
+    },
+    calculate() {
+      this.input = this.inputShow.split("");
+      this.$options.methods.storage(this.input, this.num, this.operator);
+      //   alert(this.num);
+      //   alert(this.operator);
+      var times = this.operator.length;
+      var tempPriority = 0;
+
+      for (var i = 0; i < times; i++) {
+        var location = this.$options.methods.getLocation(this.operator);
+        // 算出所有两个数运算的值
+        if (this.operator[location] == "*") {
+          tempPriority = this.num[location] * this.num[location + 1];
+        } else if (this.operator[location] == "/") {
+          tempPriority = this.num[location] / this.num[location + 1];
+        } else if (this.operator[location] == "+") {
+          tempPriority = parseFloat(this.num[location]) + parseFloat(this.num[location + 1]);
+        } else if (this.operator[location] == "-") {
+          tempPriority = this.num[location] - this.num[location + 1];
+        }else{
+            alert("未知错误");
+        }
+        this.num[location] = tempPriority;
+        this.num.splice(location + 1, 1);
+        this.operator.splice(location, 1);
+      }
+      this.result = this.num[0];  
+      console.log(this.result);
+
+      // 绑定
+    //   this.$options.methods.clear.bind(this)();
     },
     clear() {
-      this.input = "";
+      this.input = [];
+      this.inputShow = "";
       this.result = "";
+      this.num = [];
+      this.operator = [];
+    },
+    getLocation(operator) {
+      // 返回第一个要运算符号的位置
+      for (var i = 0; i < operator.length; i++) {
+        if (operator[i] == "*" || operator[i] == "/") {
+          return i;
+        }
+      }
+      return 0;
     }
   }
 };
