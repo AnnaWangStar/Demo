@@ -115,44 +115,12 @@ export default {
     };
   },
   methods: {
-    // 显示输出的所有数和操作符
+    // 显示输入的所有数和操作符
     append(i) {
       this.inputShow += i;
     },
-    /*calculate() {
-      var num1 = 0;
-      var num2 = 0;
-      var str1 = "";
-      var str2 = "";
-
-      for (var j = 0; j < this.input.length; j++) {
-        // 两个数的加法
-        if (this.input[j] == "+") {
-          // 取出+前的数
-          for (var k = 0; k < j; k++) {
-            str1 = str1 + this.input[k];
-          }
-          num1 = parseFloat(str1);
-          // 取出+后的数
-          for (var l = j; l < this.input.length; l++) {
-            str2 = str2 + this.input[l];
-          }
-          num2 = parseFloat(str2);
-        }
-        this.result = num1 + num2;
-
-        // else if (this.input[j] == "-") {
-        //   var b = j;
-        // } else if (this.input[j] == "*") {
-        //   var c = j;
-        // } else if (this.input[j] == "/") {
-        //   var d = j;
-        // }
-      }
-      return this.result;
-    },*/
+    // 遍历数据和运算符，分别存在两个数组中
     storage(input, num, operator) {
-      // alert(input);
       var numTemp = "";
       var k = -1;
       for (var i = 0; i < input.length; i++) {
@@ -162,6 +130,7 @@ export default {
           input[i] == "*" ||
           input[i] == "/"
         ) {
+            // 返回两个运算符之间的数
           for (var j = k + 1; j < i; j++) {
             numTemp = numTemp + input[j];
           }
@@ -171,16 +140,16 @@ export default {
           numTemp = "";
         }
       }
+    //   将最后一个数值，也放进数组
       for (var m = k + 1; m < input.length; m++) {
         numTemp = numTemp + input[m];
       }
       num.push(numTemp);
     },
+    // 计算
     calculate() {
       this.input = this.inputShow.split("");
       this.$options.methods.storage(this.input, this.num, this.operator);
-      //   alert(this.num);
-      //   alert(this.operator);
       var times = this.operator.length;
       var tempPriority = 0;
 
@@ -192,22 +161,24 @@ export default {
         } else if (this.operator[location] == "/") {
           tempPriority = this.num[location] / this.num[location + 1];
         } else if (this.operator[location] == "+") {
-          tempPriority = parseFloat(this.num[location]) + parseFloat(this.num[location + 1]);
+          tempPriority =
+            parseFloat(this.num[location]) + parseFloat(this.num[location + 1]);
         } else if (this.operator[location] == "-") {
           tempPriority = this.num[location] - this.num[location + 1];
-        }else{
-            alert("未知错误");
+        } else {
+          alert("未知错误");
         }
         this.num[location] = tempPriority;
         this.num.splice(location + 1, 1);
         this.operator.splice(location, 1);
       }
-      this.result = this.num[0];  
+      this.result = this.num[0];
       console.log(this.result);
 
       // 绑定
-    //   this.$options.methods.clear.bind(this)();
+      //   this.$options.methods.clear.bind(this)();
     },
+    // 清除所有数据
     clear() {
       this.input = [];
       this.inputShow = "";
@@ -216,12 +187,13 @@ export default {
       this.operator = [];
     },
     getLocation(operator) {
-      // 返回第一个要运算符号的位置
+      // 遍历所有的符号数组，将第一个乘除返回
       for (var i = 0; i < operator.length; i++) {
         if (operator[i] == "*" || operator[i] == "/") {
           return i;
         }
       }
+      // 如果没有乘除，默认从第一个运算符开始计算
       return 0;
     }
   }
