@@ -37,7 +37,7 @@
             </el-table-column>
         </el-table> -->
         <div>计算器BY王醒</div>
-        <el-input v-model="inputShow" placeholder="请输入内容"></el-input>
+        <el-input v-model="inputShow" placeholder="请输入内容"  @keyup.enter.native="calculate()"></el-input>
         <el-input v-model="result" placeholder="结果是"></el-input>
         <table>
             <!-- 第一行 -->
