@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <el-input v-model="input" placeholder="计算式"></el-input> -->
-        <el-table>
+        <!-- <el-table>
             <el-table-body>结果</el-table-body>
             <el-table-column prop="date" label="数字" width="100">
                 <el-table-column label="7" width="60">
@@ -35,8 +35,8 @@
                     </el-table-column>
                 </el-table-column>
             </el-table-column>
-        </el-table>
-
+        </el-table> -->
+        <div>计算器BY王醒</div>
         <el-input v-model="input" placeholder="请输入内容"></el-input>
         <el-input v-model="result" placeholder="结果是"></el-input>
         <table>

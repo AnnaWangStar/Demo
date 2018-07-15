@@ -5,6 +5,8 @@
       <demo1></demo1>
       <demo2></demo2>
       <demo3></demo3>
+      <demo4></demo4>
+
     </div>
   </div>
 </template>
@@ -14,6 +16,8 @@ import Calculator from "./component/Calculator";
 import Demo1 from "./component/Demo1";
 import Demo2 from "./component/Demo2";
 import Demo3 from "./component/Demo3";
+import Demo4 from "./component/Demo4";
+
 
 export default {
   components: {
@@ -21,6 +25,8 @@ export default {
     demo1: Demo1,
     demo2: Demo2,
     demo3: Demo3,
+    demo4: Demo4,
+
 
   }
 };
