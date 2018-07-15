@@ -4,7 +4,7 @@
       <input type="text">
     </div>
     <table class="calc-operation">
-      <thead></thead>
+      <thead>这是个没有实现的计算器</thead>
       <tbody>
         <!-- 第一行 -->
         <tr>
