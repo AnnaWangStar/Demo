@@ -122,7 +122,6 @@ export default {
     // 遍历数据和运算符，分别存在两个数组中
     storage(input, num, operator) {
       var numTemp = "";
-      var k = -1;
       for (var i = 0; i < input.length; i++) {
         if (
           input[i] == "+" ||
@@ -130,20 +129,14 @@ export default {
           input[i] == "*" ||
           input[i] == "/"
         ) {
-            // 返回两个运算符之间的数
-          for (var j = k + 1; j < i; j++) {
-            numTemp = numTemp + input[j];
-          }
-          num.push(numTemp);
           operator.push(input[i]);
-          k = i;
+          num.push(numTemp);
           numTemp = "";
+        } else {
+          numTemp = numTemp + input[i];
         }
       }
-    //   将最后一个数值，也放进数组
-      for (var m = k + 1; m < input.length; m++) {
-        numTemp = numTemp + input[m];
-      }
+      // 将最后个数值push到数组中
       num.push(numTemp);
     },
     // 计算
@@ -176,7 +169,7 @@ export default {
       console.log(this.result);
 
       // 绑定
-      //   this.$options.methods.clear.bind(this)();
+      // this.$options.methods.clear.bind(this)();
     },
     // 清除所有数据
     clear() {
