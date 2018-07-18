@@ -118,6 +118,7 @@ export default {
     };
   },
   methods: {
+    // 递归demo
     recursionResult(fatherThis, n) {
       var temp = "";
       // 计算递归
