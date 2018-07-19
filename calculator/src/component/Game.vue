@@ -1,79 +1,28 @@
 <template>
-    <div>
-        <table>
-            <!-- 第一行 -->
-            <tr>
-                <td>
-                    <div :class="`color${gameData[0]}`">{{gameData[0]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[1]}`">{{gameData[1]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[2]}`">{{gameData[2]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[3]}`">{{gameData[3]}}</div>
-                </td>
-            </tr>
-            <!-- 第二行 -->
-            <tr>
-                <td>
-                    <div :class="`color${gameData[4]}`">{{gameData[4]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[5]}`">{{gameData[5]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[6]}`">{{gameData[6]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[7]}`">{{gameData[7]}}</div>
-                </td>
-            </tr>
-            <!-- 第三行 -->
-            <tr>
-                <td>
-                    <div :class="`color${gameData[8]}`">{{gameData[8]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[9]}`">{{gameData[9]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[10]}`">{{gameData[10]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[11]}`">{{gameData[11]}}</div>
-                </td>
-            </tr>
-            <!-- 第四行 -->
-            <tr>
-                <td>
-                    <div :class="`color${gameData[12]}`">{{gameData[12]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[13]}`">{{gameData[13]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[14]}`">{{gameData[14]}}</div>
-                </td>
-                <td>
-                    <div :class="`color${gameData[15]}`">{{gameData[15]}}</div>
-                </td>
-            </tr>
-        </table>
-        <input type="button" @click="moveUp()" value="向上">
-        <input type="button" @click="moveUp()" value="向下">
-        <input type="button" @click="moveUp()" value="左">
-        <input type="button" @click="moveUp()" value="右">
+  <div>
+    <table>
+      <!-- 第一行 -->
+      <tr v-for="(itemArray, rowNum) in gameData">
+        <template v-for='(itemValue, columnNum) in itemArray'>
+          <td>
+            <!-- itemValue=gameData[rowNum][columnNum]-->
+            <div :class="`color${itemValue}`">{{gameData[rowNum][columnNum]}}</div>
+          </td>
+        </template>
+      </tr>
+    </table>
+    <input type="button" @click="moveUp()" value="向上">
+    <input type="button" @click="moveUp()" value="向下">
+    <input type="button" @click="moveUp()" value="左">
+    <input type="button" @click="moveUp()" value="右">
 
-    </div>
+  </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      gameData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      gameData: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     };
   },
   methods: {
@@ -88,8 +37,11 @@ export default {
       var zeroLocation = [];
       //   找出所有为0的位置
       for (var i = 0; i < this.gameData.length; i++) {
-        if (this.gameData[i] == 0) {
-          zeroLocation.push(i);
+        for (var j = 0; j < this.gameData[i].length; j++) {
+          if (this.gameData[i][j] == 0) {
+            var tempLocation = [i, j];
+            zeroLocation.push(tempLocation);
+          }
         }
       }
       return zeroLocation[Math.floor(Math.random() * zeroLocation.length)];
@@ -103,18 +55,74 @@ export default {
         return 4;
       }
     },
+    // 在空白位置生成随机值
+    fillNum4Blank() {
+      // var tempLocation = this.randomLocation();
+      // this.gameData[tempLocation[0]][tempLocation[1]] = this.randomNumber();
+      var tempLocation = this.randomLocation();
+      var rowNum = this.gameData[tempLocation[0]];
+      rowNum[tempLocation[1]] = this.randomNumber();
+      this.gameData.splice(tempLocation[0], 1, rowNum);
+    },
     // 上下左右事件
     moveUp() {
-      for(var i=0;i < this.gameData.length; i++){
-        if(this.gameData[i] != 0){
-          
+      var tempGameData = JSON.parse(JSON.stringify(this.gameData));
+
+      for (var i = 0; i < 4; i++) {
+        // 把非0的数，按顺序存起来
+        var tempArr = [];
+        for (var j = 0; j < 4; j++) {
+          if (this.gameData[j][i] != 0) {
+            tempArr.push(this.gameData[j][i]);
+          }
+        }
+        // 计算tempArr:[2,2,4]
+        var resultArr = [];
+
+        if (tempArr.length > 1) {
+          for (var k = 0; k < tempArr.length - 1; k++) {
+            // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+            if (tempArr[k] == tempArr[k + 1]) {
+              resultArr.push(tempArr[k + 1] * 2);
+              // 同时跳过第二个相加的值
+              k++;
+            } 
+            else {
+              // 如果相邻的数不相等，则将数直接放在resultArr中
+              resultArr.push(tempArr[k]);
+              // 将最后一位数放在resultArr中
+              if (k == tempArr.length - 2) {
+                resultArr.push(tempArr[k + 1]);
+              }
+            }
+          }
+        } else {
+          // 一列中，只有一个非0的值
+          resultArr = tempArr;
+        }
+
+        // 结果resultArr:[4,4]，覆盖gameData[][i]
+        for (var j = 0; j < 4; j++) {
+          if (j < resultArr.length) {
+            this.gameData[j][i] = resultArr[j];
+          } else {
+            this.gameData[j][i] = 0;
+          }
         }
       }
-
-      // 在剩余的空格中生成一个随机值
-      this.gameData.splice(this.randomLocation(), 1, this.randomNumber());
-      // this.refreshStyle.bind(this)();
-      
+      // 判斷所有的值是否都未發生變化
+      var flag = true;
+      for (var i = 0; i < tempGameData.length; i++) {
+        for (var j = 0; j < tempGameData[i].length; j++) {
+          if (tempGameData[i][j] != this.gameData[i][j]) {
+            flag = false;
+          }
+        }
+      }
+      if (!flag) {
+        // 在剩余的空格中生成一个随机值
+        this.fillNum4Blank();
+      }
 
       console.log("moveUp");
     },
@@ -138,9 +146,10 @@ export default {
     }
   },
   created: function() {
-    this.gameData[this.randomLocation()] = this.randomNumber();
-    this.gameData[this.randomLocation()] = this.randomNumber();
+    this.fillNum4Blank();
+    this.fillNum4Blank();
 
+    console.log(this.gameData);
     // this.refreshStyle();
   }
 };
