@@ -4,61 +4,61 @@
             <!-- 第一行 -->
             <tr>
                 <td>
-                    <div :class="colorData[0]">{{gameData[0]}}</div>
+                    <div :class="`color${gameData[0]}`">{{gameData[0]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[1]">{{gameData[1]}}</div>
+                    <div :class="`color${gameData[1]}`">{{gameData[1]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[2]">{{gameData[2]}}</div>
+                    <div :class="`color${gameData[2]}`">{{gameData[2]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[3]">{{gameData[3]}}</div>
+                    <div :class="`color${gameData[3]}`">{{gameData[3]}}</div>
                 </td>
             </tr>
             <!-- 第二行 -->
             <tr>
                 <td>
-                    <div :class="colorData[4]">{{gameData[4]}}</div>
+                    <div :class="`color${gameData[4]}`">{{gameData[4]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[5]">{{gameData[5]}}</div>
+                    <div :class="`color${gameData[5]}`">{{gameData[5]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[6]">{{gameData[6]}}</div>
+                    <div :class="`color${gameData[6]}`">{{gameData[6]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[7]">{{gameData[7]}}</div>
+                    <div :class="`color${gameData[7]}`">{{gameData[7]}}</div>
                 </td>
             </tr>
             <!-- 第三行 -->
             <tr>
                 <td>
-                    <div :class="colorData[8]">{{gameData[8]}}</div>
+                    <div :class="`color${gameData[8]}`">{{gameData[8]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[9]">{{gameData[9]}}</div>
+                    <div :class="`color${gameData[9]}`">{{gameData[9]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[10]">{{gameData[10]}}</div>
+                    <div :class="`color${gameData[10]}`">{{gameData[10]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[11]">{{gameData[11]}}</div>
+                    <div :class="`color${gameData[11]}`">{{gameData[11]}}</div>
                 </td>
             </tr>
             <!-- 第四行 -->
             <tr>
                 <td>
-                    <div :class="colorData[12]">{{gameData[12]}}</div>
+                    <div :class="`color${gameData[12]}`">{{gameData[12]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[13]">{{gameData[13]}}</div>
+                    <div :class="`color${gameData[13]}`">{{gameData[13]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[14]">{{gameData[14]}}</div>
+                    <div :class="`color${gameData[14]}`">{{gameData[14]}}</div>
                 </td>
                 <td>
-                    <div :class="colorData[15]">{{gameData[15]}}</div>
+                    <div :class="`color${gameData[15]}`">{{gameData[15]}}</div>
                 </td>
             </tr>
         </table>
@@ -74,33 +74,15 @@ export default {
   data() {
     return {
       gameData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      colorData: [
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0",
-        "color0"
-      ]
     };
   },
   methods: {
     //   刷新样式
-    refreshStyle() {
-      for (var i = 0; i < this.gameData.length; i++) {
-        this.colorData[i] = "color" + this.gameData[i];
-      }
-    },
+    // refreshStyle() {
+    //   for (var i = 0; i < this.gameData.length; i++) {
+    //     this.colorData[i] = "color" + this.gameData[i];
+    //   }
+    // },
     // 随机的一个为0的位置
     randomLocation() {
       var zeroLocation = [];
@@ -123,27 +105,34 @@ export default {
     },
     // 上下左右事件
     moveUp() {
-      this.gameData[this.randomLocation()] = this.randomNumber();
-      this.refreshStyle.bind(this)();
+      for(var i=0;i < this.gameData.length; i++){
+        if(this.gameData[i] != 0){
+          
+        }
+      }
+
+      // 在剩余的空格中生成一个随机值
+      this.gameData.splice(this.randomLocation(), 1, this.randomNumber());
+      // this.refreshStyle.bind(this)();
       
 
       console.log("moveUp");
     },
     moveDown() {
       this.gameData[this.randomLocation()] = this.randomNumber();
-      this.refreshStyle.bind(this)();
+      // this.refreshStyle.bind(this)();
 
       console.log("moveDown");
     },
     moveLeft() {
       this.gameData[this.randomLocation()] = this.randomNumber();
-      this.refreshStyle.bind(this)();
+      // this.refreshStyle.bind(this)();
 
       console.log("moveLeft");
     },
     moveRight() {
       this.gameData[this.randomLocation()] = this.randomNumber();
-      this.refreshStyle.bind(this)();
+      // this.refreshStyle.bind(this)();
 
       console.log("moveRight");
     }
@@ -152,7 +141,7 @@ export default {
     this.gameData[this.randomLocation()] = this.randomNumber();
     this.gameData[this.randomLocation()] = this.randomNumber();
 
-    this.refreshStyle();
+    // this.refreshStyle();
   }
 };
 </script>
