@@ -7,7 +7,8 @@
       <demo3></demo3>
       <demo4></demo4> -->
       <!-- <demo5></demo5> -->
-      <game></game>
+      <!-- <game></game> -->
+      <game2></game2>
     </div>
   </div>
 </template>
@@ -20,6 +21,7 @@ import Demo3 from "./component/Demo3";
 import Demo4 from "./component/Demo4";
 import Demo5 from "./component/Demo5";
 import Game from "./component/Game";
+import Game2 from "./component/Game2";
 
 export default {
   components: {
@@ -30,6 +32,7 @@ export default {
     demo4: Demo4,
     demo5: Demo5,
     game: Game,
+    game2: Game2
   }
 };
 </script>
