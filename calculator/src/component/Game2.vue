@@ -12,10 +12,12 @@
         </template>
       </tr>
     </table>
-    <input type="button" @click="moveUp()" @keyup.enter="moveUp()" value="向上">
+    <input type="button" @click="moveUp()" @keyup.up="moveUp()" value="向上">
     <input type="button" @click="moveDown()" @keyup.down="moveUp()" value="向下">
     <input type="button" @click="moveLeft()" @keyup.left="moveUp()" value="向左">
     <input type="button" @click="moveRight()" @keyup.right="moveUp()" value="向右">
+
+    <input type="text" @keyup.up="moveUp()" value="向上">
 
   </div>
 </template>
@@ -27,12 +29,6 @@ export default {
     };
   },
   methods: {
-    //   刷新样式
-    // refreshStyle() {
-    //   for (var i = 0; i < this.gameData.length; i++) {
-    //     this.colorData[i] = "color" + this.gameData[i];
-    //   }
-    // },
     // 随机的一个为0的位置
     randomLocation() {
       var zeroLocation = [];
@@ -44,6 +40,9 @@ export default {
             zeroLocation.push(tempLocation);
           }
         }
+      }
+      if (zeroLocation.length == 0) {
+        return -1;
       }
       return zeroLocation[Math.floor(Math.random() * zeroLocation.length)];
     },
@@ -58,8 +57,6 @@ export default {
     },
     // 在空白位置生成随机值
     fillNum4Blank() {
-      // var tempLocation = this.randomLocation();
-      // this.gameData[tempLocation[0]][tempLocation[1]] = this.randomNumber();
       var tempLocation = this.randomLocation();
       var rowNum = this.gameData[tempLocation[0]];
       rowNum[tempLocation[1]] = this.randomNumber();
@@ -86,6 +83,49 @@ export default {
         }
       }
       return tempArr;
+    },
+    border() {
+      for (var i = 0; i < this.gameData.length; i++) {
+        for (var j = 0; j < this.gameData[i].length; j++) {
+          if (this.gameData[i][j] == this.gameData[i][j + 1] || this.gameData[i][j] == this.gameData[i+1][j]) {
+            // 有相邻的两个值
+            return true;
+          }
+        }
+      }
+      
+      return false;
+    },
+    judgeSpace(tempGameData) {
+      // 判斷所有的值是否都未發生變化
+      var flag = true;
+      for (var i = 0; i < tempGameData.length; i++) {
+        for (var j = 0; j < tempGameData[i].length; j++) {
+          if (tempGameData[i][j] != this.gameData[i][j]) {
+            flag = false;
+          }
+        }
+      }
+
+      if (!flag) {
+        //   在剩余的空格中生成一个随机值
+        this.fillNum4Blank();
+      } else {
+        border();
+
+        if (this.randomLocation() == -1) {
+          if (confirm("是否重新开始游戏")) {
+            this.gameData = [
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0]
+            ];
+            this.fillNum4Blank();
+            this.fillNum4Blank();
+          }
+        }
+      }
     },
 
     // 上下左右事件
@@ -119,23 +159,7 @@ export default {
           }
         }
       }
-
-      // 判斷所有的值是否都未發生變化
-      var flag = true;
-      for (var i = 0; i < tempGameData.length; i++) {
-        for (var j = 0; j < tempGameData[i].length; j++) {
-          if (tempGameData[i][j] != this.gameData[i][j]) {
-            flag = false;
-          }
-        }
-      }
-
-      if (!flag) {
-        //   在剩余的空格中生成一个随机值
-        this.fillNum4Blank();
-      }
-
-      console.log("moveUp");
+      this.judgeSpace(tempGameData);
     },
 
     moveDown() {
@@ -170,20 +194,7 @@ export default {
         }
       }
 
-      // 判斷所有的值是否都未發生變化
-      var flag = true;
-      for (var i = 0; i < tempGameData.length; i++) {
-        for (var j = 0; j < tempGameData[i].length; j++) {
-          if (tempGameData[i][j] != this.gameData[i][j]) {
-            flag = false;
-          }
-        }
-      }
-
-      if (!flag) {
-        //   在剩余的空格中生成一个随机值
-        this.fillNum4Blank();
-      }
+      this.judgeSpace(tempGameData);
     },
     moveLeft() {
       console.log(JSON.stringify(this.gameData));
@@ -192,12 +203,7 @@ export default {
 
       for (var i = 0; i < 4; i++) {
         // 把非0的数，按顺序存起来
-        var tempArr = [];
-        for (var j = 0; j < 4; j++) {
-          if (this.gameData[i][j] != 0) {
-            tempArr.push(this.gameData[i][j]);
-          }
-        }
+        var tempArr = this.rowNotNone(i);
 
         // 计算tempArr:[2,2,4]
         var resultArr = [];
@@ -224,34 +230,14 @@ export default {
         }
       }
 
-      // 判斷所有的值是否都未發生變化
-      var flag = true;
-      for (var i = 0; i < tempGameData.length; i++) {
-        for (var j = 0; j < tempGameData[i].length; j++) {
-          if (tempGameData[i][j] != this.gameData[i][j]) {
-            flag = false;
-          }
-        }
-      }
-
-      if (!flag) {
-        //   在剩余的空格中生成一个随机值
-        this.fillNum4Blank();
-      }
+      this.judgeSpace(tempGameData);
     },
     moveRight() {
-      console.log(JSON.stringify(this.gameData));
-
       var tempGameData = JSON.parse(JSON.stringify(this.gameData));
 
       for (var i = 0; i < 4; i++) {
         // 把非0的数，按顺序存起来
-        var tempArr = [];
-        for (var j = 0; j < 4; j++) {
-          if (this.gameData[i][j] != 0) {
-            tempArr.push(this.gameData[i][j]);
-          }
-        }
+        var tempArr = this.rowNotNone(i);
 
         // 计算tempArr:[2,2,4]
         var resultArr = [];
@@ -278,22 +264,7 @@ export default {
         }
       }
 
-      // 判斷所有的值是否都未發生變化
-      var flag = true;
-      for (var i = 0; i < tempGameData.length; i++) {
-        for (var j = 0; j < tempGameData[i].length; j++) {
-          if (tempGameData[i][j] != this.gameData[i][j]) {
-            flag = false;
-          }
-        }
-      }
-
-      if (!flag) {
-        //   在剩余的空格中生成一个随机值
-        this.fillNum4Blank();
-      }
-
-      console.log(JSON.stringify(this.gameData));
+      this.judgeSpace(tempGameData);
     }
   },
 
