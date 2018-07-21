@@ -1,23 +1,23 @@
 <template>
-    <div>
-        <h1>Game2</h1>
-        <table>
-            <!-- 第一行 -->
-            <tr v-for="(itemArray, rowNum) in gameData">
-                <template v-for='(itemValue, columnNum) in itemArray'>
-                    <td>
-                        <!-- itemValue=gameData[rowNum][columnNum]-->
-                        <div :class="`color${itemValue}`">{{gameData[rowNum][columnNum]}}</div>
-                    </td>
-                </template>
-            </tr>
-        </table>
-        <input type="button" @click="moveUp()" value="向上">
-        <input type="button" @click="moveDown()" value="向下">
-        <input type="button" @click="moveLeft()" value="左">
-        <input type="button" @click="moveRight()" value="右">
+  <div>
+    <h1>Game2</h1>
+    <table>
+      <!-- 第一行 -->
+      <tr v-for="(itemArray, rowNum) in gameData">
+        <template v-for='(itemValue, columnNum) in itemArray'>
+          <td>
+            <!-- itemValue=gameData[rowNum][columnNum]-->
+            <div :class="`color${itemValue}`">{{gameData[rowNum][columnNum]}}</div>
+          </td>
+        </template>
+      </tr>
+    </table>
+    <input type="button" @click="moveUp()" @keyup.enter="moveUp()" value="向上">
+    <input type="button" @click="moveDown()" @keyup.down="moveUp()" value="向下">
+    <input type="button" @click="moveLeft()" @keyup.left="moveUp()" value="向左">
+    <input type="button" @click="moveRight()" @keyup.right="moveUp()" value="向右">
 
-    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -76,6 +76,18 @@ export default {
       }
       return tempArr;
     },
+
+    // 把一行中所有非0的数，按顺序存起来
+    rowNotNone(i) {
+      var tempArr = [];
+      for (var j = 0; j < 4; j++) {
+        if (this.gameData[i][j] != 0) {
+          tempArr.push(this.gameData[i][j]);
+        }
+      }
+      return tempArr;
+    },
+
     // 上下左右事件
     moveUp() {
       var tempGameData = JSON.parse(JSON.stringify(this.gameData));
@@ -86,26 +98,16 @@ export default {
 
         // 计算tempArr:[2,2,4]
         var resultArr = [];
-
-        if (tempArr.length > 1) {
-          for (var k = 0; k < tempArr.length - 1; k++) {
-            // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
-            if (tempArr[k] == tempArr[k + 1]) {
-              resultArr.push(tempArr[k + 1] * 2);
-              // 同时跳过第二个相加的值
-              k++;
-            } else {
-              // 如果相邻的数不相等，则将数直接放在resultArr中
-              resultArr.push(tempArr[k]);
-              // 将最后一位数放在resultArr中
-              if (k == tempArr.length - 2) {
-                resultArr.push(tempArr[k + 1]);
-              }
-            }
+        for (var k = 0; k < tempArr.length; k++) {
+          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+          if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
+            resultArr.push(tempArr[k + 1] * 2);
+            // 同时跳过第二个相加的值
+            k++;
+          } else {
+            // 如果相邻的数不相等，则将数直接放在resultArr中
+            resultArr.push(tempArr[k]);
           }
-        } else {
-          // 一列中，只有一个非0的值
-          resultArr = tempArr;
         }
 
         // 结果resultArr:[4,4]，覆盖gameData[][i]
@@ -141,27 +143,19 @@ export default {
 
       for (var i = 0; i < 4; i++) {
         var tempArr = this.columnNotNone(i);
+
         // 计算tempArr:[2,2,4]
         var resultArr = [];
-        if (tempArr.length > 1) {
-          for (var k = tempArr.length - 1; k > 0; k--) {
-            // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
-            if (tempArr[k] == tempArr[k - 1]) {
-              resultArr.push(tempArr[k] * 2);
-              // 同时跳过第二个相加的值
-              k--;
-            } else {
-              // 如果相邻的数不相等，则将数直接放在resultArr中
-              resultArr.push(tempArr[k]);
-              // 将最后一位数放在resultArr中
-              if (k == 1) {
-                resultArr.push(tempArr[0]);
-              }
-            }
+        for (var k = tempArr.length - 1; k >= 0; k--) {
+          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+          if (k - 1 >= 0 && tempArr[k] == tempArr[k - 1]) {
+            resultArr.push(tempArr[k] * 2);
+            // 同时跳过第二个相加的值
+            k--;
+          } else {
+            // 如果相邻的数不相等，则将数直接放在resultArr中
+            resultArr.push(tempArr[k]);
           }
-        } else {
-          // 一列中，只有一个非0的值
-          resultArr = tempArr;
         }
 
         // 结果resultArr:[8,4]，覆盖gameData[][i]
@@ -192,18 +186,117 @@ export default {
       }
     },
     moveLeft() {
-      this.gameData[this.randomLocation()] = this.randomNumber();
-      // this.refreshStyle.bind(this)();
+      console.log(JSON.stringify(this.gameData));
 
-      console.log("moveLeft");
+      var tempGameData = JSON.parse(JSON.stringify(this.gameData));
+
+      for (var i = 0; i < 4; i++) {
+        // 把非0的数，按顺序存起来
+        var tempArr = [];
+        for (var j = 0; j < 4; j++) {
+          if (this.gameData[i][j] != 0) {
+            tempArr.push(this.gameData[i][j]);
+          }
+        }
+
+        // 计算tempArr:[2,2,4]
+        var resultArr = [];
+
+        for (var k = 0; k < tempArr.length; k++) {
+          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+          if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
+            resultArr.push(tempArr[k + 1] * 2);
+            // 同时跳过第二个相加的值
+            k++;
+          } else {
+            // 如果相邻的数不相等，则将数直接放在resultArr中
+            resultArr.push(tempArr[k]);
+          }
+        }
+
+        // 结果resultArr:[2,2,4]，覆盖gameData[i][]
+        for (var j = 0; j < 4; j++) {
+          if (j < resultArr.length) {
+            this.gameData[i][j] = resultArr[j];
+          } else {
+            this.gameData[i][j] = 0;
+          }
+        }
+      }
+
+      // 判斷所有的值是否都未發生變化
+      var flag = true;
+      for (var i = 0; i < tempGameData.length; i++) {
+        for (var j = 0; j < tempGameData[i].length; j++) {
+          if (tempGameData[i][j] != this.gameData[i][j]) {
+            flag = false;
+          }
+        }
+      }
+
+      if (!flag) {
+        //   在剩余的空格中生成一个随机值
+        this.fillNum4Blank();
+      }
     },
     moveRight() {
-      this.gameData[this.randomLocation()] = this.randomNumber();
-      // this.refreshStyle.bind(this)();
+      console.log(JSON.stringify(this.gameData));
 
-      console.log("moveRight");
+      var tempGameData = JSON.parse(JSON.stringify(this.gameData));
+
+      for (var i = 0; i < 4; i++) {
+        // 把非0的数，按顺序存起来
+        var tempArr = [];
+        for (var j = 0; j < 4; j++) {
+          if (this.gameData[i][j] != 0) {
+            tempArr.push(this.gameData[i][j]);
+          }
+        }
+
+        // 计算tempArr:[2,2,4]
+        var resultArr = [];
+
+        for (var k = 0; k < tempArr.length; k++) {
+          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+          if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
+            resultArr.push(tempArr[k + 1] * 2);
+            // 同时跳过第二个相加的值
+            k++;
+          } else {
+            // 如果相邻的数不相等，则将数直接放在resultArr中
+            resultArr.push(tempArr[k]);
+          }
+        }
+
+        // 结果resultArr:[2,2,4]，覆盖gameData[i][]
+        for (var j = 0; j < 4; j++) {
+          if (j < resultArr.length) {
+            this.gameData[i][3 - j] = resultArr[resultArr.length - 1 - j];
+          } else {
+            this.gameData[i][3 - j] = 0;
+          }
+        }
+      }
+
+      // 判斷所有的值是否都未發生變化
+      var flag = true;
+      for (var i = 0; i < tempGameData.length; i++) {
+        for (var j = 0; j < tempGameData[i].length; j++) {
+          if (tempGameData[i][j] != this.gameData[i][j]) {
+            flag = false;
+          }
+        }
+      }
+
+      if (!flag) {
+        //   在剩余的空格中生成一个随机值
+        this.fillNum4Blank();
+      }
+
+      console.log(JSON.stringify(this.gameData));
     }
   },
+
   created: function() {
     this.fillNum4Blank();
     this.fillNum4Blank();
