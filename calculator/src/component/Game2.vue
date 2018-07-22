@@ -84,16 +84,27 @@ export default {
       }
       return tempArr;
     },
+
+    // 判断两两是否相同，如果相同，返回true；如果不同，返回false；
     border() {
+      // 横向比较
       for (var i = 0; i < this.gameData.length; i++) {
-        for (var j = 0; j < this.gameData[i].length; j++) {
-          if (this.gameData[i][j] == this.gameData[i][j + 1] || this.gameData[i][j] == this.gameData[i+1][j]) {
-            // 有相邻的两个值
+        for (var j = 0; j < this.gameData[i].length - 1; j++) {
+          if (this.gameData[i][j] == this.gameData[i][j + 1]) {
             return true;
           }
         }
       }
-      
+      // 纵向比较
+      for (var i = 0; i < this.gameData.length; i++) {
+        for (var j = 0; j < this.gameData[i].length - 1; j++) {
+          if (this.gameData[j][i] == this.gameData[j + 1][i]) {
+            return true;
+          }
+        }
+      }
+
+      // 全都两两不同
       return false;
     },
     judgeSpace(tempGameData) {
@@ -108,12 +119,12 @@ export default {
       }
 
       if (!flag) {
-        //   在剩余的空格中生成一个随机值
+        // 在剩余的空格中生成一个随机值
         this.fillNum4Blank();
       } else {
-        border();
-
-        if (this.randomLocation() == -1) {
+        // 没有变化，不生成随机值
+        if (!this.border()) {
+          // 如果，全部两两不相同
           if (confirm("是否重新开始游戏")) {
             this.gameData = [
               [0, 0, 0, 0],
@@ -127,7 +138,39 @@ export default {
         }
       }
     },
-
+    // 上和左的方法
+    addUpOrLeft(tempArr) {
+      var resultArr = [];
+      for (var k = 0; k < tempArr.length; k++) {
+        // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+        if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
+          resultArr.push(tempArr[k + 1] * 2);
+          // 同时跳过第二个相加的值
+          k++;
+        } else {
+          // 如果相邻的数不相等，则将数直接放在resultArr中
+          resultArr.push(tempArr[k]);
+        }
+      }
+      return resultArr;
+    },
+    // 下和右的方法
+    addDownOrRight(tempArr) {
+      // 计算tempArr:[2,2,4]
+      var resultArr = [];
+      for (var k = tempArr.length - 1; k >= 0; k--) {
+        // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
+        if (k - 1 >= 0 && tempArr[k] == tempArr[k - 1]) {
+          resultArr.push(tempArr[k] * 2);
+          // 同时跳过第二个相加的值
+          k--;
+        } else {
+          // 如果相邻的数不相等，则将数直接放在resultArr中
+          resultArr.push(tempArr[k]);
+        }
+      }
+      return resultArr;
+    },
     // 上下左右事件
     moveUp() {
       var tempGameData = JSON.parse(JSON.stringify(this.gameData));
@@ -137,18 +180,7 @@ export default {
         var tempArr = this.columnNotNone(i);
 
         // 计算tempArr:[2,2,4]
-        var resultArr = [];
-        for (var k = 0; k < tempArr.length; k++) {
-          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
-          if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
-            resultArr.push(tempArr[k + 1] * 2);
-            // 同时跳过第二个相加的值
-            k++;
-          } else {
-            // 如果相邻的数不相等，则将数直接放在resultArr中
-            resultArr.push(tempArr[k]);
-          }
-        }
+        var resultArr = this.addUpOrLeft(tempArr);
 
         // 结果resultArr:[4,4]，覆盖gameData[][i]
         for (var j = 0; j < 4; j++) {
@@ -159,6 +191,7 @@ export default {
           }
         }
       }
+
       this.judgeSpace(tempGameData);
     },
 
@@ -169,18 +202,7 @@ export default {
         var tempArr = this.columnNotNone(i);
 
         // 计算tempArr:[2,2,4]
-        var resultArr = [];
-        for (var k = tempArr.length - 1; k >= 0; k--) {
-          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
-          if (k - 1 >= 0 && tempArr[k] == tempArr[k - 1]) {
-            resultArr.push(tempArr[k] * 2);
-            // 同时跳过第二个相加的值
-            k--;
-          } else {
-            // 如果相邻的数不相等，则将数直接放在resultArr中
-            resultArr.push(tempArr[k]);
-          }
-        }
+        var resultArr = this.addDownOrRight(tempArr);
 
         // 结果resultArr:[8,4]，覆盖gameData[][i]
         var count = 0;
@@ -197,28 +219,13 @@ export default {
       this.judgeSpace(tempGameData);
     },
     moveLeft() {
-      console.log(JSON.stringify(this.gameData));
-
       var tempGameData = JSON.parse(JSON.stringify(this.gameData));
-
       for (var i = 0; i < 4; i++) {
         // 把非0的数，按顺序存起来
         var tempArr = this.rowNotNone(i);
 
         // 计算tempArr:[2,2,4]
-        var resultArr = [];
-
-        for (var k = 0; k < tempArr.length; k++) {
-          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
-          if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
-            resultArr.push(tempArr[k + 1] * 2);
-            // 同时跳过第二个相加的值
-            k++;
-          } else {
-            // 如果相邻的数不相等，则将数直接放在resultArr中
-            resultArr.push(tempArr[k]);
-          }
-        }
+        var resultArr = this.addUpOrLeft(tempArr);
 
         // 结果resultArr:[2,2,4]，覆盖gameData[i][]
         for (var j = 0; j < 4; j++) {
@@ -229,7 +236,6 @@ export default {
           }
         }
       }
-
       this.judgeSpace(tempGameData);
     },
     moveRight() {
@@ -240,27 +246,17 @@ export default {
         var tempArr = this.rowNotNone(i);
 
         // 计算tempArr:[2,2,4]
-        var resultArr = [];
-
-        for (var k = 0; k < tempArr.length; k++) {
-          // 如果相邻的两个数相等，就相加并合并成一个结果，放到resultArr，
-          if (k + 1 < tempArr.length && tempArr[k] == tempArr[k + 1]) {
-            resultArr.push(tempArr[k + 1] * 2);
-            // 同时跳过第二个相加的值
-            k++;
-          } else {
-            // 如果相邻的数不相等，则将数直接放在resultArr中
-            resultArr.push(tempArr[k]);
-          }
-        }
+        var resultArr = this.addDownOrRight(tempArr);
 
         // 结果resultArr:[2,2,4]，覆盖gameData[i][]
-        for (var j = 0; j < 4; j++) {
-          if (j < resultArr.length) {
-            this.gameData[i][3 - j] = resultArr[resultArr.length - 1 - j];
+        var count = 0;
+        for (var j = 3; j >=0; j--) {
+          if (count < resultArr.length) {
+            this.gameData[i][j] = resultArr[count];
           } else {
-            this.gameData[i][3 - j] = 0;
+            this.gameData[i][j] = 0;
           }
+          count++;
         }
       }
 
@@ -272,8 +268,22 @@ export default {
     this.fillNum4Blank();
     this.fillNum4Blank();
 
-    console.log(this.gameData);
-    // this.refreshStyle();
+    var father = this;
+    document.onkeydown = function(e) {
+      var key = window.event.keyCode;
+
+      console.log("before"+JSON.parse(JSON.stringify(father.gameData)));
+      if (key === 38) {
+        father.moveUp();
+      } else if (key === 40) {
+        father.moveDown();
+      } else if (key === 37) {
+        father.moveLeft();
+      } else if (key === 39) {
+        father.moveRight();
+      }
+      console.log("after"+JSON.parse(JSON.stringify(father.gameData)));
+    };
   }
 };
 </script>
