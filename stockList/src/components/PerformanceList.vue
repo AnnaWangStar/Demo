@@ -12,11 +12,12 @@
                 <el-table-column prop="cpu" label="CPU">
                 </el-table-column>
 
-                <el-table-column prop="firstFps" label="首帧时间">
+                <el-table-column prop="firstFps" label="首屏">
+                </el-table-column>
+                <el-table-column prop="firstFps" label="灯光亮度">
                 </el-table-column>
 
                 <el-table-column prop="failRate" label="失败率">
-                </el-table-column>
             </el-table>
         </div>
         <div>
